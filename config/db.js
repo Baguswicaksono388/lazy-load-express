@@ -1,8 +1,9 @@
 'use strict';
+var Sequelize = require('sequelize');
 var dotenv = require('dotenv');
 dotenv.config();
 
-module.exports = {
+var db = new Sequelize({
     HOST: process.env.HOST,
     USER: process.env.USER,
     PASSWORD: process.env.PASS,
@@ -15,4 +16,6 @@ module.exports = {
         acquire: 3000,
         idle: 10000
     }
-}
+})
+
+module.exports = db;

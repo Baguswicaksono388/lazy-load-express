@@ -18,9 +18,16 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 // Call models
-const dbBelajar = require('./models/index');
-dbBelajar.sequelize.sync();
+const dbBelajar = require('./config/db');
+dbBelajar.sync();
 require('./models/cart/index').sequelize.sync();
+
+try {
+    dbBelajar.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+}
 
 // Call Routes
 const routesArticle = require('./routes/routes');

@@ -1,29 +1,33 @@
-'use strict'
-module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('posts', {
-        id: {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            defaultValue: DataTypes.UUIDV4,
-            allowNull: false
-        },
-        user_id: {
-            type: DataTypes.UUID,
-            allowNull: false
-        },
-        content: {
-            type: DataTypes.TEXT,
-            required: true,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        updated_at: DataTypes.DATE,
-        deleted_at: DataTypes.DATE,
-    }, {
-        underscored: true,
-        freezeTableName: true
-    });
-    return Post;
-}
+'use strict';
+var Sequelize = require('sequelize');
+const db = require('../config/db');
+
+var posts = db.define('posts', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false
+    },
+    user_id: {
+        type: Sequelize.UUID,
+        allowNull: false
+    },
+    content: {
+        type: Sequelize.TEXT,
+        required: true,
+    },
+    created_at: {
+        type: Sequelize.DATE,
+        // allowNull: false
+    },
+    updated_at: Sequelize.DATE,
+    deleted_at: Sequelize.DATE,
+}, {
+    underscored: true,
+    freezeTableName: true
+});
+
+
+module.exports = posts;
+

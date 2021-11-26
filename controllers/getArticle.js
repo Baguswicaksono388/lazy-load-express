@@ -1,27 +1,24 @@
 'use strict'
-const dbBelajar = require('../models/index');
+const model = require('../models/index');
 const { post } = require('../routes/routes');
-const tablePosts = dbBelajar.posts;
-const tableComments = dbBelajar.comments;
-const tableUsers = dbBelajar.users;
 
 exports.getArticle = async (req, res) => {
     try {
-        tableUsers.hasMany(tablePosts, {foreignKey: 'user_id'});
-        tablePosts.belongsTo(tableUsers, {foreignKey: 'id'});
-        tablePosts.hasMany(tableComments, {foreignKey: 'post_id'});
-        tableComments.belongsTo(tablePosts, {foreignKey: 'id'});
+        model.users.hasMany(model.posts, {foreignKey: 'user_id'});
+        model.posts.belongsTo(model.users, {foreignKey: 'id'});
+        model.posts.hasMany(model.comments, {foreignKey: 'post_id'});
+        model.comments.belongsTo(model.posts, {foreignKey: 'id'});
 
-        tableUsers.findAll({
+        await model.users.findAll({
             attributes: ['id','username','role'],
             include: [{
-                model: tablePosts,
+                model: model.posts,
                 attributes:['id','user_id','content','created_at'],
-                required: true,
+                // required: true,
                 include: [{
-                    model: tableComments,
+                    model: model.comments,
                     attributes: ['id','post_id','content','commenter_username','commenter_email','status','created_at'],
-                    required: true,
+                    // required: true,
                 }]
             }]
         }).then((users) => {
@@ -39,19 +36,19 @@ exports.getArticle = async (req, res) => {
 
 exports.getArticleSimple = async (req, res) => {
     try {
-        tableUsers.hasMany(tablePosts, {foreignKey: 'user_id'});
-        tablePosts.belongsTo(tableUsers, {foreignKey: 'id'});
-        tablePosts.hasMany(tableComments, {foreignKey: 'post_id'});
-        tableComments.belongsTo(tablePosts, {foreignKey: 'id'});
+        model.users.hasMany(model.posts, {foreignKey: 'user_id'});
+        model.posts.belongsTo(model.users, {foreignKey: 'id'});
+        model.posts.hasMany(model.comments, {foreignKey: 'post_id'});
+        model.comments.belongsTo(model.posts, {foreignKey: 'id'});
 
-        tableUsers.findAll({
+        model.users.findAll({
             attributes: ['id','username','role'],
             include: [{
-                model: tablePosts,
+                model: model.posts,
                 attributes:['id','user_id','content','created_at'],
                 required: true,
                 include: [{
-                    model: tableComments,
+                    model: model.comments,
                     attributes: ['id','post_id','content','commenter_username','commenter_email','status','created_at'],
                     required: true,
                 }]

@@ -1,6 +1,5 @@
 'use strict';
-const dbBelajar = require('../../models/index');
-const tableUser = dbBelajar.users;
+const model = require('../../models/index');
 
 exports.createUser = async (req, res) => {
     try {
@@ -14,7 +13,7 @@ exports.createUser = async (req, res) => {
             return;
         }
 
-        await tableUser.create(input)
+        await model.users.create(input)
         .then((data) => {
             res.status(201).json({
                 message: 'Success',
