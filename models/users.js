@@ -1,32 +1,25 @@
 'use strict';
-var Sequelize = require('sequelize');
-const db = require('../config/db');
 
-var users = db.define('users', {
-
-    id: {
-        type: Sequelize.UUID,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false
-    },
-    username: {
-        type: Sequelize.STRING,
-        required: true,
-    },
-    role: {
-        type: Sequelize.INTEGER
-        // values: ['admin', 'user', 'disabled'],
-    },
-    created_at: {
-        type: Sequelize.DATE,
-        // allowNull: false,
-    },
-    updated_at: Sequelize.DATE,
-    deleted_at: Sequelize.DATE,
-}, {
-    underscored: true,
-    freezeTableName: true
-});
-
-module.exports = users;
+module.exports = (sequelize, DataTypes) => {
+    const Users = sequelize.define("Users", {
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false
+        },
+        username: {
+            type: DataTypes.STRING,
+            required: true,
+        },
+        role: {
+            type: DataTypes.INTEGER
+            // values: ['admin', 'user', 'disabled'],
+        },
+        deleted_at: DataTypes.DATE,
+    }, {
+        freezeTableName: true,
+        updatedAt: 'updated_at',
+        createdAt: 'created_at'
+    });
+}

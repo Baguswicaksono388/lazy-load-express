@@ -1,11 +1,31 @@
-const comments = require('./comments');
-const posts = require('./posts');
-const users = require('./users');
+const { Sequelize, DataTypes } = require('sequelize');
+const dbConfig = require('../config/db');
 
-const model = {}
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+    host: dbConfig.HOST,
+    port: dbConfig.PORT,
+    dialect: dbConfig.dialect,
+    operatorsAliases: false,
 
-model.comments = comments;
-model.posts = posts;
-model.users = users;
+    pool: {
+        max: dbConfig.pool.max,
+        min: dbConfig.pool.min,
+        acquire: dbConfig.pool.acquire,
+        idle: dbConfig.pool.idle
+    }
+});
 
-module.exports = model;
+sequelize.authenticate()
+.then(() => {
+    console.log("DB Belajar Connected");
+}).catch(err => {
+    console.log(err)
+});
+
+const db = {};
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.users = require('./users')(sequelize, DataTypes);
+
+module.exports = db;

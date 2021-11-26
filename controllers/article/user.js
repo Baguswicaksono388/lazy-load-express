@@ -1,5 +1,6 @@
 'use strict';
-const model = require('../../models/index');
+var db = require('../../models/index');
+const Users = db.users;
 
 exports.createUser = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ exports.createUser = async (req, res) => {
             return;
         }
 
-        await model.users.create(input)
+        await Users.create(input)
         .then((data) => {
             res.status(201).json({
                 message: 'Success',
