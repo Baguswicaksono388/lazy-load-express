@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 const controllerGetArticle = require('../controllers/getArticle');
-const controllerUser = require('../controllers/article/user');
+const controllerUser = require('../controllers/article/Users');
 const controllerPost = require('../controllers/article/article');
 const controllerComment = require('../controllers/article/comment');
     

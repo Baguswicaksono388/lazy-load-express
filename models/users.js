@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define("Users", {
+    const Users = sequelize.define("users", {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -18,8 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         deleted_at: DataTypes.DATE,
     }, {
+        // underscored: true,
         freezeTableName: true,
         updatedAt: 'updated_at',
         createdAt: 'created_at'
     });
+
+    return Users;
 }
