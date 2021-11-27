@@ -30,4 +30,8 @@ db.users = require('./users')(sequelize, DataTypes);
 db.posts = require('./posts')(sequelize, DataTypes);
 db.comments = require('./comments')(sequelize, DataTypes);
 
+// db.users.hasOne(db.posts, { foreignKey: 'user_id', as: 'postDetail' });
+db.users.hasMany(db.posts, { foreignKey: 'user_id', as: 'postDetail' });
+// db.posts.belongsTo(db.users, {foreignKey: 'id'});
+
 module.exports = db;

@@ -9,6 +9,7 @@ const controllerPost = require('../controllers/article/article');
 const controllerComment = require('../controllers/article/comment');
     
 router.get('/get-article', controllerGetArticle.getArticle);
+router.get('/article-belongsTo', controllerGetArticle.getArticleBelongsTo);
 router.get('/get-article-simple', controllerGetArticle.getArticleSimple);
 router.post('/users', controllerUser.createUser);
 router.post('/posts', controllerPost.inputArticle);

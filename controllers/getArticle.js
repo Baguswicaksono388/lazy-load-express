@@ -1,35 +1,59 @@
 'use strict'
-const model = require('../models/index');
+const db = require('../models/index');
+const tableUser = db.users;
+const tablePosts = db.posts;
+const tableComments = db.comments;
 const { post } = require('../routes/routes');
 
 exports.getArticle = async (req, res) => {
     try {
-        model.users.hasMany(model.posts, { foreignKey: 'user_id' });
-        model.posts.belongsTo(model.users, {foreignKey: 'id'});
-        model.posts.hasMany(model.comments, {foreignKey: 'post_id'});
-        model.comments.belongsTo(model.posts, {foreignKey: 'id'});
+        // tableUser.hasMany(tablePosts, { foreignKey: 'user_id' });
+        // tablePosts.belongsTo(tableUser, {foreignKey: 'id'});
+        // tablePosts.hasMany(tableComments, {foreignKey: 'post_id'});
+        // tableComments.belongsTo(tablePosts, {foreignKey: 'id'});
 
-        const users = await model.users.findAll({
-            attributes: ['id', 'username', 'role'],
-            // include: [{
-            //     model: model.posts,
-            //     attributes: ['id', 'user_id', 'content', 'created_at'],
+        await tableUser.findAll({
+            attributes: [
+                ['id','user_id'], 
+                'username', 'role'
+            ],
+            include: [{
+                model: tablePosts,
+                as: 'postDetail',
+                attributes: ['id', 'user_id', 'content', 'created_at'],
                 // required: true,
                 // include: [{
-                //     model: model.comments,
+                //     model: tableComments,
                 //     attributes: ['id','post_id','content','commenter_username','commenter_email','status','created_at'],
                 //     // required: true,
                 // }]
-            // }]
+            }]
+        }).then((data) => {
+            res.status(200).json({
+                message: 'Success',
+                data: data
+            })
         });
 
-        let posts = await users.model.posts();
-        let response = {
-            users: users,
-            posts: posts
-        }
+    } catch (error) {
+        console.error(error)
+    }
+}
 
-        res.status(200).json(response);
+exports.getArticleBelongsTo = async (req, res) => {
+    try {
+        await tablePosts.findAll({
+            include: [
+                {
+                    model: tableUser
+                }
+            ]
+        }).then((data) => {
+            res.status(200).json({
+                message: 'Success',
+                data: data
+            })
+        });
 
     } catch (error) {
         console.error(error)
@@ -38,19 +62,19 @@ exports.getArticle = async (req, res) => {
 
 exports.getArticleSimple = async (req, res) => {
     try {
-        model.users.hasMany(model.posts, {foreignKey: 'user_id'});
-        model.posts.belongsTo(model.users, {foreignKey: 'id'});
-        model.posts.hasMany(model.comments, {foreignKey: 'post_id'});
-        model.comments.belongsTo(model.posts, {foreignKey: 'id'});
+        tableUser.hasMany(tablePosts, {foreignKey: 'user_id'});
+        tablePosts.belongsTo(tableUser, {foreignKey: 'id'});
+        tablePosts.hasMany(tableComments, {foreignKey: 'post_id'});
+        tableComments.belongsTo(tablePosts, {foreignKey: 'id'});
 
-        model.users.findAll({
+        tableUser.findAll({
             attributes: ['id','username','role'],
             include: [{
-                model: model.posts,
+                model: tablePosts,
                 attributes:['id','user_id','content','created_at'],
                 required: true,
                 include: [{
-                    model: model.comments,
+                    model: tableComments,
                     attributes: ['id','post_id','content','commenter_username','commenter_email','status','created_at'],
                     required: true,
                 }]
