@@ -21,8 +21,7 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 // Call models
-require('./models/index').sequelize.sync();
-// dbBelajar.sync();
+require('./models/index')
 require('./models/cart/index').sequelize.sync();
 
 // Call Routes

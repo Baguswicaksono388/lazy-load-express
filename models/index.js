@@ -1,4 +1,7 @@
-const {Sequelize, DataTypes} = require('sequelize');
+'use strict';
+var dotenv = require('dotenv');
+dotenv.config();
+const { Sequelize, DataTypes } = require('sequelize');
 const dbConfig = require('../config/db');
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
@@ -26,12 +29,18 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+db.sequelize.sync();
+
 db.users = require('./users')(sequelize, DataTypes);
 db.posts = require('./posts')(sequelize, DataTypes);
 db.comments = require('./comments')(sequelize, DataTypes);
 
+
+db.users.hasMany(db.posts, {foreignKey: 'user_id'});
+db.posts.belongsTo(db.users, { foreignKey: 'user_id' });
+
 // db.users.hasOne(db.posts, { foreignKey: 'user_id', as: 'postDetail' });
-db.users.hasMany(db.posts, { foreignKey: 'user_id', as: 'postDetail' });
+// db.users.hasMany(db.posts, { foreignKey: 'user_id', as: 'postDetail' });
 // db.posts.belongsTo(db.users, {foreignKey: 'id'});
 
 module.exports = db;
